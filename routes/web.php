@@ -24,6 +24,10 @@ $is_Admin = "";
 
 
 Route::get('/', function () {
+    return view('kumpens.index');
+});
+
+Route::get('/login', function () {
     return view('auth.login');
 });
 
