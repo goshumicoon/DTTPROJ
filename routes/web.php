@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Members;
 use App\Http\Livewire\Projectles;
 use App\Http\Livewire\QualityControls;
+
 
 
 
@@ -27,9 +29,31 @@ Route::get('/', function () {
     return view('kumpens.index');
 });
 
+Route::get('/nartoh', function () {
+    return view('kumpens.cobgam');
+});
+
+Route::get('/hemje', function () {
+    return view('layouts.hemje');
+});
+
+
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->name('login');
+
+
+
+// Route::get('/login', function () {
+//     return view('auth.login');
+// })->name('login');
+
+Route::get('/packages2', function() {
+    return view('kumpens.HalPaket.packages2');
+})->name('packages2');
+
+
+
 
 
 //member
@@ -38,6 +62,11 @@ Route::middleware('auth')->group(function() {
     Route::get('/dashboard', function() {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/packages', function() {
+        return view('kumpens.HalPaket.packages');
+    })->name('packages');
+
 
     Route::get('redirects','App\Http\Controllers\HomeController@index');
     Route::get('member', Members::class)->name('member');

@@ -4,6 +4,5 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-
 {{-- disini tempat untuk dashboard --}}
 </x-app-layout>

@@ -12,12 +12,15 @@ class HomeController extends Controller
     public function index()
     {
         $role = Auth::user()->privilage;
-        if($role==1){
+        if ($role == 1) {
             return view('admin.dashboard');
-        }else{
+        } elseif ($role == 0) {
             return view('dashboard');
+        } else {
+            return redirect()->route('login')->withErrors(['password' => 'Password Salah']);
         }
     }
+
 
     public function cek_admin()
     {

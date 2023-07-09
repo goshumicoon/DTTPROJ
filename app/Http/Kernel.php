@@ -14,12 +14,13 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
-        // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Fruitcake\Cors\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
+        \App\Http\Middleware\WpContentMiddleware::class,
+        \App\Http\Middleware\WpHomeMiddleware::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
@@ -62,7 +63,57 @@ class Kernel extends HttpKernel
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        //'privilage' => \App\Http\Middleware\privilage::class,
+        // 'privilage' => \App\Http\Middleware\privilage::class,
     ];
 }
+
+namespace App\Http\Middleware;
+
+use Closure;
+
+class WpContentMiddleware
+{
+    public function handle($request, Closure $next)
+    {
+        $path = $request->getRequestUri();
+
+        if (strpos($path, 'wp-content') !== false) {
+            $newPath = str_replace('wp-content', 'nganu/wp-content', $path);
+
+            return response()->file("C:/greet_laravel/DTTPROJ/resources/views{$newPath}");
+        }
+
+        return $next($request);
+    }
+}
+
+namespace App\Http\Middleware;
+
+use Closure;
+
+class WpHomeMiddleware
+{
+    public function handle($request, Closure $next)
+    {
+        $path = $request->getRequestUri();
+
+        $keywords = [
+            'css_wpHomePage',
+            'images_wpHomePage',
+            'js_wpHomePage',
+        ];
+
+        foreach ($keywords as $keyword) {
+            if (strpos($path, $keyword) !== false) {
+                $newPath = str_replace($keyword, "nganu/{$keyword}", $path);
+
+                return response()->file("C:/greet_laravel/DTTPROJ/resources/views{$newPath}");
+            }
+        }
+
+        return $next($request);
+    }
+}
+
