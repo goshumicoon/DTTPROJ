@@ -2,8 +2,15 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+    {{-- untuk search agent --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
+    {{-- ujung untuk searchbar --}}
+
+
+
 <script data-no-optimize="1">var litespeed_docref=sessionStorage.getItem("litespeed_docref");litespeed_docref&&(Object.defineProperty(document,"referrer",{get:function(){return litespeed_docref}}),sessionStorage.removeItem("litespeed_docref"));</script>
 	<meta charset="UTF-8">
 		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -479,8 +486,77 @@ Dalam perjalanan bisnis kami, kami memahami betapa pentingnya kepercayaan Anda t
 			<h2 class="elementor-heading-title elementor-size-default">Agen tersebar luas<br> di seluruh Indonesia</h2>		</div>
 				</div>
 				<div class="elementor-element elementor-element-be9961c elementor-widget elementor-widget-image" data-id="be9961c" data-element_type="widget" data-widget_type="image.default">
-				<div class="elementor-widget-container">
-															<img data-lazyloaded="1" src="data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" decoding="async" width="170" height="170" data-src="{{asset('/wp-content/uploads/2023/04/search.png')}}" class="attachment-medium_large size-medium_large wp-image-27" alt="" data-srcset="{{asset('/wp-content/uploads/2023/04/search.png')}} 170w, {{asset('/wp-content/uploads/2023/04/search-150x150.png')}} 150w" data-sizes="(max-width: 170px) 100vw, 170px"><noscript><img decoding="async" width="170" height="170" src="{{asset('/images_homepage/2023-04-search.png')}}" class="attachment-medium_large size-medium_large wp-image-27" alt="" srcset="{{asset('/images_homepage/2023-04-search.png')}} 170w, {{asset('/images_homepage/2023-04-search-150x150.png')}} 150w" sizes="(max-width: 170px) 100vw, 170px"></noscript>															</div>
+				    <div class="elementor-widget-container">
+
+							{{-- <img data-lazyloaded="1" src="data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" decoding="async" width="170" height="170" data-src="{{asset('/wp-content/uploads/2023/04/search.png')}}" class="attachment-medium_large size-medium_large wp-image-27" alt="" data-srcset="{{asset('/wp-content/uploads/2023/04/search.png')}} 170w, {{asset('/wp-content/uploads/2023/04/search-150x150.png')}} 150w" data-sizes="(max-width: 170px) 100vw, 170px"><noscript><img decoding="async" width="170" height="170" src="{{asset('/images_homepage/2023-04-search.png')}}" class="attachment-medium_large size-medium_large wp-image-27" alt="" srcset="{{asset('/images_homepage/2023-04-search.png')}} 170w, {{asset('/images_homepage/2023-04-search-150x150.png')}} 150w" sizes="(max-width: 170px) 100vw, 170px"></noscript>															 --}}
+                            {{-- awal untuk search bar html --}}
+                            <form action="" method="GET">
+                                <div class="input-group mb-3">
+                                    <input type="text" autocomplete="off" class="form-control" name="keyword" placeholder="Cari Agen..." id="search-bar">
+                                    <button class="btn btn-primary" type="submit">Cari</button>
+                                </div>
+                                <div id="suggestions-container"></div>
+                            </form>
+
+                            <div class="modal fade" id="agenModal" tabindex="-1" role="dialog" aria-labelledby="agenModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="agenModalLabel">Detail Agen</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="agen-details"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                $(document).ready(function() {
+                                    $('#search-bar').on('input', function() {
+                                        var keyword = $(this).val();
+                                        if (keyword.length >= 2) {
+                                            $.ajax({
+                                                url: '{{ route('lok-agen.search') }}',
+                                                method: 'GET',
+                                                data: { keyword: keyword },
+                                                dataType: 'json',
+                                                success: function(data) {
+                                                    var suggestionsContainer = $('#suggestions-container');
+                                                    suggestionsContainer.empty(); // Hapus konten sebelumnya
+
+                                                    if (data.length > 0) {
+                                                        data.forEach(function(agen) {
+                                                            var card = $('<div>').addClass('card mb-3');
+                                                            var cardBody = $('<div>').addClass('card-body');
+
+                                                            var namaAgen = $('<h5>').addClass('card-title').text(agen.nama_agen);
+                                                            var alamat = $('<p>').addClass('card-text').text('Alamat: ' + agen.alamat);
+
+                                                            cardBody.append(namaAgen, alamat);
+                                                            card.append(cardBody);
+                                                            suggestionsContainer.append(card);
+
+                                                            // Tambahkan event click pada card
+                                                            card.on('click', function() {
+                                                                $('#search-bar').val(agen.nama_agen); // Isi search-bar dengan nama agen yang dipilih
+                                                            });
+                                                        });
+                                                    } else {
+                                                        var noResults = $('<p>').addClass('text-muted').text('Tidak ada hasil ditemukan.');
+                                                        suggestionsContainer.append(noResults);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                });
+                            </script>
+
+                    </div>
 				</div>
 					</div>
 				</div>

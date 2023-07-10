@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Members;
 use App\Http\Livewire\Projectles;
 use App\Http\Livewire\QualityControls;
+use App\Http\Controllers\LokAgenController;
 
 
 
@@ -28,6 +29,8 @@ $is_Admin = "";
 Route::get('/', function () {
     return view('kumpens.index');
 });
+
+Route::get('/lok-agen/search', [LokAgenController::class, 'search'])->name('lok-agen.search');
 
 Route::get('/nartoh', function () {
     return view('kumpens.cobgam');
