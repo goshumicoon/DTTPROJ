@@ -2,8 +2,8 @@
 Contributors: LiteSpeedTech
 Tags: caching, optimize, performance, pagespeed, core web vitals, seo, speed, image optimize, compress, object cache, redis, memcached, database cleaner
 Requires at least: 4.0
-Tested up to: 6.2.2
-Stable tag: 5.5
+Tested up to: 6.3.1
+Stable tag: 5.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -249,6 +249,38 @@ For more detailed information about crawler setup, please see [the Crawler docum
 The vast majority of plugins and themes are compatible with LiteSpeed Cache. The most up-to-date compatibility information can be found [in our documentation](https://docs.litespeedtech.com/lscache/lscwp/thirdparty/)
 
 == Changelog ==
+
+= 5.7 - Oct 10 2023 =
+* 🌱**Page Optimize** New option available: Preconnect. (xguiboy/Mukesh Patel)
+* 🌱**3rd** New Vary for Mini Cart option for Woocommerce. (Ruikai)
+* **Cloud** Force syncing the configuration to QUIC.cloud if CDN is reenabled.
+* **Cloud** Force syncing the configuration to QUIC.cloud if domain key is readded.
+* **Cloud** Limit multi-line fields when posting to QC.
+* **Cache** Treat HEAD requests as cacheable as GET. (George Wang)
+* 🐞**ESI** Patched a possible vulnerability issue. (István Márton@Wordfence #841011)
+* 🐞**ESI** Overwrite SCRIPT_URI to prevent ESI sub request resulting in redirections. (Tobolo)
+* 🐞**Image Optimize** Bypass unnecessary image processing when images were only partially optimized. (Ruikai)
+* 🐞**Guest** Guest mode will not enable WebP directly anymore. (Michael Heymann)
+* **CDN** Auto disable CDN if CDN URL is invalid. (Ruikai)
+* **CDN** Fixed a null parameter warning for PHP v8.1 (#584)
+* **API** Added `litespeed_media_add_missing_sizes` filter to allow bypassing Media's "add missing sizes" option (for Guest Optimization and otherwise). (PR #564)
+* **Guest** Fixed soft 404 and robots.txt report for guest.vary.php.
+* **Vary** Enabled `litespeed_vary_cookies` for LSWS Enterprise.
+* **GUI** Stopped WebP tip from wrongly displaying when Guest Mode is off.
+* **GUI** Added QUIC.cloud promotion postbox on dashboard page.
+* **3rd** Added `pagespeed ninja` to blocklist due to its bad bahavior.
+
+= 5.6 - Aug 1 2023 =
+* 🌱**Page Optimize** New JS Delay Includes option. (Mitchell Krog/Gerard Reches/Ignacy Hołoga)
+* **Crawler** Sitemap can use search for URL now.
+* **GUI** Restrict the scope of balloon CSS rules to avoid conflicts. (#567)
+* **Object Cache** Detect Memcached in more situations. (#568)
+* **API** Support `litespeed_purged_front` hook. (Umberto Fiorelli)
+
+= 5.5.1 - Jul 19 2023 =
+* 🐞**Image Optimization** Fixed a bug where WebP replacements couldn't be pulled without optimizing the original images.
+* 🐞**Image Optimization** Invalid images will now be removed when sending requests to the server. (#138993)
+* **Cloud** Added support for error codes `unpulled_images` and `blocklisted`. (Tynan)
 
 = 5.5 - Jun 20 2023 =
 * 🌱**Crawler** Can now use multiple sitemaps. (Tobolo/Tim Nolte)

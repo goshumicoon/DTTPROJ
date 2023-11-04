@@ -105,7 +105,7 @@ img.wp-smiley,img.emoji{display:inline !important;border:none !important;box-sha
                 <div class="ast-builder-layout-element ast-flex site-header-focus-item" data-section="title_tagline">
                   <div class="site-branding ast-site-identity" itemtype="https://schema.org/Organization" itemscope="itemscope">
                     <div class="ast-site-title-wrap">
-                      <span class="site-title" itemprop="name"><a href="https://armecawebdev.my.id/" rel="home" itemprop="url">My Blog</a></span>
+                      <span class="site-title" itemprop="name"><a href="{{route('homepage')}}" rel="home" itemprop="url">Dream Travel Tour</a></span>
                     </div>
                   </div>
                 </div>
@@ -120,11 +120,6 @@ img.wp-smiley,img.emoji{display:inline !important;border:none !important;box-sha
                             <li class="page_item page-item-7 menu-item">
                               <a href="https://armecawebdev.my.id/dtt-hompage/" class="menu-link">DTT Hompage</a>
                             </li>
-                            <li class="page_item page-item-95 menu-item">
-                              <a href="https://armecawebdev.my.id/e-store/" class="menu-link">e-store</a>
-                            </li>
-
-
                             <li class="page_item page-item-105 menu-item">
                               <a href="{{ route('packages2') }}" class="menu-link">Paket Umrah Direct</a>
                             </li>
@@ -152,7 +147,7 @@ img.wp-smiley,img.emoji{display:inline !important;border:none !important;box-sha
               <div class="ast-builder-layout-element ast-flex site-header-focus-item" data-section="title_tagline">
                 <div class="site-branding ast-site-identity" itemtype="https://schema.org/Organization" itemscope="itemscope">
                   <div class="ast-site-title-wrap">
-                    <span class="site-title" itemprop="name"><a href="https://armecawebdev.my.id/" rel="home" itemprop="url">My Blog</a></span>
+                    <span class="site-title" itemprop="name"><a href="" rel="home" itemprop="url">Dream Travel Tour</a></span>
                   </div>
                 </div>
               </div>
@@ -179,10 +174,10 @@ img.wp-smiley,img.emoji{display:inline !important;border:none !important;box-sha
                 <div id="ast-hf-mobile-menu" class="main-navigation">
                     <ul class="main-header-menu ast-nav-menu ast-flex submenu-with-border astra-menu-animation-fade stack-on-mobile">
                         <li class="page_item page-item-7 menu-item">
-                            <a href="https://armecawebdev.my.id/dtt-hompage/" class="menu-link">DTT Hompage</a>
+                            <a href="{{route('homepage')}}" class="menu-link">DTT Hompage</a>
                         </li>
                         <li class="page_item page-item-95 menu-item">
-                            <a href="https://armecawebdev.my.id/e-store/" class="menu-link">e-store</a>
+                            <a href="{{route('packages2')}}" class="menu-link">e-store</a>
                         </li>
                         <li class="nav-item dropdown align-self-center">
                             <a class="nav-item dropdown align-self-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">login</a>

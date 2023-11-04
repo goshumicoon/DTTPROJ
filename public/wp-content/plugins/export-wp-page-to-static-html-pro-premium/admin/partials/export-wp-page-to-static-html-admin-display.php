@@ -378,10 +378,13 @@ function rcwpth_hidden_class($filename){
                                         <div class="p-t-15">
                                             <button class="btn btn--radius-2 btn--blue export_internal_page_to_html" type="submit"><?php _e('Export HTML', 'export-wp-page-to-static-html'); ?> <span class="spinner_x hide_spin"></span></button>
                                             <a class="cancel_rc_html_export_process" href="#">
-                                                Cancel
+                                                <?php _e('Cancel', 'export-wp-page-to-static-html'); ?>
                                             </a>
                                             <a href="" class="btn btn--radius-2 btn--green download-btn hide" type="submit" btn-text="<?php _e('Download the file', 'export-wp-page-to-static-html'); ?>"><?php _e('Download the file', 'export-wp-page-to-static-html'); ?></a>
                                             <a href="" class="view_exported_file hide" type="submit" target="_blank"><?php _e('View Exported File', 'export-wp-page-to-static-html'); ?></a>
+                                            <div class="error-notice" style="display: none;">
+                                                <p><?php _e('Something went wrong! please try again. If failed continously then contact us.', 'export-wp-page-to-static-html'); ?></p>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>

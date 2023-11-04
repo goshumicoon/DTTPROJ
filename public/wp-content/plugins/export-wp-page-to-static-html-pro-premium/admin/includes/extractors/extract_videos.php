@@ -19,6 +19,10 @@ class extract_videos
      */
     public function get_videos($url="")
     {
+        // Check if the cancel command is found for the admin and exit if true
+        if ($this->admin->is_cancel_command_found()) {
+            exit;
+        }
         $src = $this->admin->site_data;
         $videoLinks = $src->find('video');
         $sourceLinks = $src->find('source');
@@ -33,6 +37,10 @@ class extract_videos
             }
 
             foreach ($videoLinks as $link) {
+                // Check if the cancel command is found for the admin and exit if true
+                if ($this->admin->is_cancel_command_found()) {
+                    exit;
+                }
                 if (isset($link->src) && !empty($link->src)) {
                     $src_link = $link->src;
                     $src_link = html_entity_decode($src_link, ENT_QUOTES);
@@ -72,6 +80,10 @@ class extract_videos
             }
 
             foreach ($sourceLinks as $link) {
+                // Check if the cancel command is found for the admin and exit if true
+                if ($this->admin->is_cancel_command_found()) {
+                    exit;
+                }
                 if (isset($link->src) && !empty($link->src)) {
                     $src_link = $link->src;
                     $src_link = html_entity_decode($src_link, ENT_QUOTES);
@@ -106,6 +118,10 @@ class extract_videos
 
         if (!empty($videoHrefLinks)){
             foreach ($videoHrefLinks as $link) {
+                // Check if the cancel command is found for the admin and exit if true
+                if ($this->admin->is_cancel_command_found()) {
+                    exit;
+                }
                 if (isset($link->href) && !empty($link->href)) {
                     $src_link = $link->href;
                     $src_link = html_entity_decode($src_link, ENT_QUOTES);

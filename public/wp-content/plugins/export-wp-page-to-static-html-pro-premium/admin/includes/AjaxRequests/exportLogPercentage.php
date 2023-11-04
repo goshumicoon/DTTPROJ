@@ -33,9 +33,9 @@ class initAjax extends \ExportHtmlAdmin\Export_Wp_Page_To_Static_Html_Admin
         $response = '';
         $cancel_command = $this->getSettings('cancel_command', false);
         $logs_in_details = $this->getSettings('logs_in_details', false);
-        $exportStatus = $this->getSettings('task');
-        $creatingHtmlProcess = $this->getSettings('creating_html_process');
-        $creatingZipStatus = $this->getSettings('creating_zip_process');
+        $exportStatus = $this->getSettings('task', '');
+        $creatingHtmlProcess = $this->getSettings('creating_html_process', '');
+        $creatingZipStatus = $this->getSettings('creating_zip_process', '');
         $total_zip_files = $this->getSettings('total_zip_files', 0);
         $total_pushed_file_to_zip = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}export_page_to_html_logs WHERE type='added_into_zip_file' ");
         $zipDownloadLink = $this->getSettings('zipDownloadLink');

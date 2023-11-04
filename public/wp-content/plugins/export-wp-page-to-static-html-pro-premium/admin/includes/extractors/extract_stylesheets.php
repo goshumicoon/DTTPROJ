@@ -19,6 +19,10 @@ class extract_stylesheets
      */
     public function get_stylesheets($url="")
     {
+        // Check if the cancel command is found for the admin and exit if true
+        if ($this->admin->is_cancel_command_found()) {
+            exit;
+        }
         $saveAllAssetsToSpecificDir = $this->admin->getSaveAllAssetsToSpecificDir();
         $src = $this->admin->site_data;
         $path_to_dot = $this->admin->rc_path_to_dot($url, true, true);
@@ -27,6 +31,10 @@ class extract_stylesheets
 
         if(!empty($cssLinks)){
             foreach ($cssLinks as $key => $link) {
+                // Check if the cancel command is found for the admin and exit if true
+                if ($this->admin->is_cancel_command_found()) {
+                    exit;
+                }
                 if(isset($link->href) && !empty($link->href) ){
                     $href_link = $link->href;
                     $href_link = \html_entity_decode($href_link, ENT_QUOTES);
@@ -83,6 +91,10 @@ class extract_stylesheets
 
             foreach ($images_links as $key => $images) {
                 foreach ($images as $image) {
+                    // Check if the cancel command is found for the admin and exit if true
+                    if ($this->admin->is_cancel_command_found()) {
+                        exit;
+                    }
                     $image_url = $this->admin->ltrim_and_rtrim($image);
                     if (strpos($image_url, 'data:') == false && strpos($image_url, 'data:image/') == false && strpos($image_url, 'image/svg') == false && strpos($image_url, 'base64') == false) {
                         $image_url = \html_entity_decode($image_url, ENT_QUOTES);

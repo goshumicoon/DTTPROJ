@@ -19,6 +19,11 @@ class extract_images
      */
     public function get_images($url="")
     {
+
+        // Check if the cancel command is found for the admin and exit if true
+        if ($this->admin->is_cancel_command_found()) {
+            exit;
+        }
         $src = $this->admin->site_data;
         $path_to_dot = $this->admin->rc_path_to_dot($url, true, true);
         $saveAllAssetsToSpecificDir = $this->admin->getSaveAllAssetsToSpecificDir();
@@ -29,6 +34,10 @@ class extract_images
 
         if (!empty($images)) {
             foreach ($images as $img) {
+                // Check if the cancel command is found for the admin and exit if true
+                if ($this->admin->is_cancel_command_found()) {
+                    exit;
+                }
                 if (strpos($img->src, 'data:') == false && strpos($img->src, 'svg+xml') == false && strpos($img->src, 'base64') == false) {
                     $img_src = html_entity_decode($img->src, ENT_QUOTES);
                     $img_src = $this->admin->ltrim_and_rtrim($img_src);

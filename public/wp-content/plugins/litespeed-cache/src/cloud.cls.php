@@ -575,6 +575,7 @@ class Cloud extends Base
 	{
 		$home_url = home_url();
 		if (!wp_http_validate_url($home_url)) {
+			self::debug('wp_http_validate_url failed: ' . $home_url);
 			return false;
 		}
 
@@ -588,6 +589,7 @@ class Cloud extends Base
 
 		/** @since 5.0 If in valid err_domains, bypass request */
 		if ($this->_is_err_domain($home_url)) {
+			self::debug('home url is in err_domains, bypass request: ' . $home_url);
 			return false;
 		}
 
@@ -750,6 +752,18 @@ class Cloud extends Base
 		}
 
 		if (!empty($json['_code'])) {
+			self::debug('Hit err _code: ' . $json['_code']);
+			if ($json['_code'] == 'unpulled_images') {
+				$msg = __('Cloud server refused the current request due to unpulled images. Please pull the images first.', 'litespeed-cache');
+				Admin_Display::error($msg);
+				return;
+			}
+			if ($json['_code'] == 'blocklisted') {
+				$msg = __('Your domain_key has been temporarily blocklisted to prevent abuse. You may contact support at QUIC.cloud to learn more.', 'litespeed-cache');
+				Admin_Display::error($msg);
+				return;
+			}
+
 			if ($json['_code'] == 'rate_limit') {
 				self::debug('Cloud server rate limit exceeded.');
 				$msg = __('Cloud server refused the current request due to rate limiting. Please try again later.', 'litespeed-cache');
@@ -1357,6 +1371,9 @@ class Cloud extends Base
 	{
 		$this->_summary['is_linked'] = 1;
 		self::save_summary();
+
+		# Force resync qc conf
+		$this->cls('CDN\Quic')->try_sync_conf(true);
 	}
 
 	/**

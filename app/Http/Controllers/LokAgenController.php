@@ -14,6 +14,7 @@ class LokAgenController extends Controller
         $result = LokAgen::where('nama_agen', 'like', '%' . $keyword . '%')
             ->orWhere('kabupaten', 'like', '%' . $keyword . '%')
             ->orWhere('alamat', 'like', '%' . $keyword . '%')
+            ->orWhere('no_whatsapp', 'like', '%' . $keyword . '%')
             ->get();
 
         $data = $result->map(function ($agen) {
@@ -24,10 +25,12 @@ class LokAgenController extends Controller
                 'kabupaten' => $agen->kabupaten,
                 'kecamatan' => $agen->kecamatan,
                 'kelurahan' => $agen->kelurahan,
-                'alamat' => $agen->alamat
+                'alamat' => $agen->alamat,
+                'no_whatsapp' => $agen->no_whatsapp
             ];
         });
 
         return response()->json($data);
     }
 }
+

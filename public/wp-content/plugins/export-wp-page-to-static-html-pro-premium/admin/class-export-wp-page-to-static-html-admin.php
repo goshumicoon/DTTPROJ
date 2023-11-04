@@ -275,11 +275,12 @@ class Export_Wp_Page_To_Static_Html_Admin {
 
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/export-wp-page-to-static-html-admin.js', array( 'jquery' ), $this->version, false );
         wp_enqueue_script( 'rc_export_logs', plugin_dir_url( __FILE__ ) . 'js/export-logs.js', array( $this->plugin_name ), $this->version, false );
-        wp_enqueue_script( 'rc_extract_internal_page', plugin_dir_url( __FILE__ ) . 'js/extract-internal-pages.js', array( $this->plugin_name ), $this->version, false );
-        wp_enqueue_script( 'rc_extract_external_urls', plugin_dir_url( __FILE__ ) . 'js/extract-external-urls.js', array( $this->plugin_name ), $this->version, false );
+        wp_enqueue_script( 'rc_extract_internal_page', plugin_dir_url( __FILE__ ) . 'js/extract-internal-pages.js', array( $this->plugin_name, 'ewppth_toaster' ), $this->version, false );
+        wp_enqueue_script( 'rc_extract_external_urls', plugin_dir_url( __FILE__ ) . 'js/extract-external-urls.js', array( $this->plugin_name, 'ewppth_toaster' ), $this->version, false );
         wp_enqueue_script( 'rc_extract_pause_and_resume', plugin_dir_url( __FILE__ ) . 'js/pause_and_resume.js', array( $this->plugin_name ), $this->version, false );
 
         wp_enqueue_script( 'ewppth_select2', plugin_dir_url( __FILE__ ) . 'js/select2.min.js', array( 'jquery' ), '4.0.5', false );
+        wp_enqueue_script( 'ewppth_toaster', plugin_dir_url( __FILE__ ) . 'js/toastr.js', array( 'jquery' ), '4.0.5', false );
 
     }
 
@@ -687,10 +688,13 @@ class Export_Wp_Page_To_Static_Html_Admin {
     public function clear_tables_and_files()
     {
         global $wpdb;
+
+        // Step 1: Remove files and directories
+        $this->rmdir_recursive($this->upload_dir . '/exported_html_files/tmp_files');
+
+        // Step 2: Clear the database tables
         $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}export_page_to_html_logs");
         $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}export_urls_logs ");
-        $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}exportable_urls ");
-        $this->rmdir_recursive($this->upload_dir . '/exported_html_files/tmp_files');
 
         return true;
     }
@@ -699,7 +703,6 @@ class Export_Wp_Page_To_Static_Html_Admin {
     {
         if ($this->is_cancel_command_found()&&!$this->is_paused()) {
             return false;
-            exit;
         }
 
         if (!ewptshp_fs()->is_plan('pro', true)) {
@@ -947,7 +950,7 @@ class Export_Wp_Page_To_Static_Html_Admin {
 
 
     public function start_export_wp_pages_to_html_cron_task( $datas, $settigs ) {
-        if(empty($datas)){
+        if(empty($datas) && $this->is_cancel_command_found()){
             return;
         }
 
@@ -1196,8 +1199,8 @@ class Export_Wp_Page_To_Static_Html_Admin {
     public function removeAllSettings()
     {
         global $wpdb;
-        $removefromdb = $wpdb->query("UPDATE {$wpdb->prefix}options SET option_value = '' WHERE option_name LIKE '{$this->settingsKey}%'");
-        //$removefromdb = $wpdb->query("DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE '{$this->settingsKey}%'");
+        //$removefromdb = $wpdb->query("UPDATE {$wpdb->prefix}options SET option_value = '' WHERE option_name LIKE '{$this->settingsKey}%'");
+        $removefromdb = $wpdb->query("DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE '{$this->settingsKey}%'");
 
         if ($removefromdb) {
             return true;
@@ -1626,7 +1629,7 @@ class Export_Wp_Page_To_Static_Html_Admin {
 
     public function is_cancel_command_found()
     {
-        $result = $this->getSettings('cancel_command');
+        $result = $this->getSettings('cancel_command', 0);
         if ($result) {
             return true;
         }
@@ -2097,8 +2100,9 @@ class Export_Wp_Page_To_Static_Html_Admin {
     public function makeUrlWithoutProtocol($url)
     {
         $parsedUrl = parse_url($url);
-        $host = $parsedUrl['host'];
-        $path = $parsedUrl['path'];
+
+        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
+        $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
 
         return $host . $path;
     }
@@ -2109,40 +2113,34 @@ class Export_Wp_Page_To_Static_Html_Admin {
 
     public function replaceOtherSiteUrls($contents, $main_url)
     {
+        // Get the home URL without protocol
+        $home_url_without_protocol = $this->makeUrlWithoutProtocol(home_url());
 
-        if (strpos($this->makeUrlWithoutProtocol($main_url), $this->makeUrlWithoutProtocol(home_url()))!==false){
+        // Get the main URL without protocol
+        $main_url_without_protocol = $this->makeUrlWithoutProtocol($main_url);
+
+        // Check if the main URL is part of the home URL
+        if (strpos($main_url_without_protocol, $home_url_without_protocol) !== false) {
             $main_url = home_url('/');
         }
-        else{
-            $main_url = $this->getFirstUrl();
-        }
-            // URLs to replace
+
+        // URLs to replace
         $urlsToReplace = array(
-            'https:\/\/'.$this->addBackSlash($this->makeUrlWithoutProtocol($main_url)),
-            'http:\/\/'.$this->addBackSlash($this->makeUrlWithoutProtocol($main_url)),
-            '\/\/'.$this->addBackSlash($this->makeUrlWithoutProtocol($main_url)),
+            'https:\/\/' . $this->addBackSlash($main_url_without_protocol),
+            'http:\/\/' . $this->addBackSlash($main_url_without_protocol),
+            '\/\/' . $this->addBackSlash($main_url_without_protocol),
         );
 
-// Escape the URLs for use in the regular expression
+
+        // Escape the URLs for use in the regular expression
         $escapedUrls = array_map('preg_quote', $urlsToReplace, array('/','/','/'));
 
-// Pattern to match the specific URLs
-        $pattern = '/'. implode('|', $escapedUrls) .'/i';
+        // Pattern to match the specific URLs
+        $pattern = '/' . implode('|', $escapedUrls) . '/i';
 
-// Replace the specific URLs with a desired string, e.g., 'REPLACED_URL'
-        $replacement = '.\\/';
-        $processedText = preg_replace($pattern, $replacement, $contents);
-
-        // Pattern to match URLs starting with http:// or https://
-        $pattern = array(
-            'https://'.$this->makeUrlWithoutProtocol($main_url),
-            'http://'.$this->makeUrlWithoutProtocol($main_url),
-            '//'.$this->makeUrlWithoutProtocol($main_url),
-        );
-
-// Replace URLs with a desired string, e.g., 'REPLACED_URL'
+        // Replace the specific URLs with a desired string, e.g., './'
         $replacement = './';
-        $processedText = str_replace($pattern, $replacement, $processedText);
+        $processedText = preg_replace($pattern, $replacement, $contents);
 
         return $processedText;
     }
@@ -2223,6 +2221,9 @@ class Export_Wp_Page_To_Static_Html_Admin {
         if(is_array($files)) {
             //cycle through each file
             foreach($files as $file) {
+                if($this->is_cancel_command_found()){
+                    exit;
+                }
                 //make sure the file exists
                 if(file_exists($file)) {
                     if (is_file($file)) {
@@ -2244,6 +2245,9 @@ class Export_Wp_Page_To_Static_Html_Admin {
 
             //add the files
             foreach($valid_files as $file) {
+                if($this->is_cancel_command_found()){
+                    exit;
+                }
                 $filename = str_replace( $middle_patheplace_path, '', $file);
                 $zip->addFile($file, $filename);
                 $this->update_export_log($filename, 'added_into_zip_file');
@@ -2252,7 +2256,7 @@ class Export_Wp_Page_To_Static_Html_Admin {
             //echo 'The zip archive contains ',$zip->numFiles,' files with a status of ',$zip->status;
 
             //close the zip -- done!
-            @$zip->close();
+            $zip->close();
 
             //check to make sure the file exists
             return file_exists($destination) ? 'created' : 'not' ;

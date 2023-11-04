@@ -1,3 +1,8 @@
+ <?php
+$koneksi = mysqli_connect("localhost","root","","crud8");
+$get_textPromo = mysqli_fetch_array(mysqli_query($koneksi, "SELECT * FROM text_promo"));
+
+?>
 <!DOCTYPE html>
 <html lang="en-US">
     <head>

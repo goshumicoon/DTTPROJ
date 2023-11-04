@@ -62,7 +62,7 @@ if ( ! class_exists( 'Astra_Content_Typo_Configs' ) ) {
 						'px' => array(
 							'min'  => 0,
 							'step' => 1,
-							'max'  => 100,
+							'max'  => 200,
 						),
 						'em' => array(
 							'min'  => 0,
@@ -102,7 +102,7 @@ if ( ! class_exists( 'Astra_Content_Typo_Configs' ) ) {
 						'px' => array(
 							'min'  => 0,
 							'step' => 1,
-							'max'  => 100,
+							'max'  => 200,
 						),
 						'em' => array(
 							'min'  => 0,
@@ -142,7 +142,7 @@ if ( ! class_exists( 'Astra_Content_Typo_Configs' ) ) {
 						'px' => array(
 							'min'  => 0,
 							'step' => 1,
-							'max'  => 100,
+							'max'  => 200,
 						),
 						'em' => array(
 							'min'  => 0,
@@ -182,7 +182,7 @@ if ( ! class_exists( 'Astra_Content_Typo_Configs' ) ) {
 						'px' => array(
 							'min'  => 0,
 							'step' => 1,
-							'max'  => 100,
+							'max'  => 200,
 						),
 						'em' => array(
 							'min'  => 0,
@@ -222,7 +222,7 @@ if ( ! class_exists( 'Astra_Content_Typo_Configs' ) ) {
 						'px' => array(
 							'min'  => 0,
 							'step' => 1,
-							'max'  => 100,
+							'max'  => 200,
 						),
 						'em' => array(
 							'min'  => 0,
@@ -262,7 +262,7 @@ if ( ! class_exists( 'Astra_Content_Typo_Configs' ) ) {
 						'px' => array(
 							'min'  => 0,
 							'step' => 1,
-							'max'  => 100,
+							'max'  => 200,
 						),
 						'em' => array(
 							'min'  => 0,
@@ -289,7 +289,7 @@ if ( ! class_exists( 'Astra_Content_Typo_Configs' ) ) {
 						'section'  => 'section-content-typo',
 						'priority' => 999,
 						'title'    => '',
-						'help'     => '<p>' . __( 'More Options Available in Astra Pro!', 'astra' ) . '</p><a href="' . astra_get_pro_url( ASTRA_PRO_UPGRADE_URL, 'customizer', 'learn-more', 'upgrade-to-pro' ) . '" class="button button-secondary"  target="_blank" rel="noopener">' . __( 'Learn More', 'astra' ) . '</a>',
+						'help'     => '<p>' . __( 'More Options Available in Astra Pro!', 'astra' ) . '</p><a href="' . ASTRA_PRO_CUSTOMIZER_UPGRADE_URL . '" class="button button-secondary"  target="_blank" rel="noopener">' . __( 'Learn More', 'astra' ) . '</a>',
 						'settings' => array(),
 					),
 				);

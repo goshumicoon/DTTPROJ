@@ -1,7 +1,9 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <x-jet-authentication-card-logo />
+            <div class="w-50">
+            <img src="{{asset('/wp-content/uploads/2023/09/focus-logo-rec-brown-300x87.png')}}" class="img-fluid">
+            </div>
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />
@@ -18,6 +20,12 @@
                 <x-jet-label for="email" value="{{ __('Email') }}" />
                 <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
             </div>
+
+            <div>
+                <x-jet-label for="nope" value="{{ __('Nomor HP') }}" />
+                <x-jet-input id="nope" class="block mt-1 w-full" type="text" name="nope" :value="old('nope')" required />
+            </div>
+
 
             <div class="mt-4">
                 <x-jet-label for="password" value="{{ __('Password') }}" />

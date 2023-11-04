@@ -26,9 +26,11 @@ class Doc
 	public static function maybe_on_by_gm($id)
 	{
 		if (apply_filters('litespeed_conf', $id)) return;
+		if (!apply_filters('litespeed_conf', Base::O_GUEST)) return;
 		if (!apply_filters('litespeed_conf', Base::O_GUEST_OPTM)) return;
 		echo '<font class="litespeed-warning">';
-		echo '⚠️ ' . sprintf(__('This setting is passively %1$s due to %2$s!', 'litespeed-cache'), '<code>' . __('ON', 'litespeed-cache') . '</code>', Lang::title(Base::O_GUEST_OPTM));
+		echo '⚠️ ' . sprintf(__('This setting is %1$s for certain qualifying requests due to %2$s!', 'litespeed-cache'), '<code>' . __('ON', 'litespeed-cache') . '</code>', Lang::title(Base::O_GUEST_OPTM));
+		self::learn_more('https://docs.litespeedtech.com/lscache/lscwp/general/#guest-optimization');
 		echo '</font>';
 	}
 

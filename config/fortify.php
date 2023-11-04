@@ -148,7 +148,7 @@ return [
         'login' => 'redirects', // >>untuk filter ke user atau admin
         'logout' => 'login',
         'password-confirmation' => null,
-        'register' => 'dashboard',
+        'register' => 'redirects',
         'member' => 'memberb',
         'email-verification' => null,
         'password-reset' => null,

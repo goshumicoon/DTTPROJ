@@ -21,6 +21,7 @@ class CreateLokAgenTable extends Migration
             $table->string('kecamatan');
             $table->string('kelurahan');
             $table->text('alamat');
+            $table->string('no_whatsapp');
             $table->timestamps();
         });
     }

@@ -16,7 +16,7 @@
  * Plugin Name: Export WP Page to Static HTML/CSS Pro Professional
  * Plugin URI:        https://myrecorp.com
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           2.5.2
+ * Version:           2.5.4
  * Update URI: https://api.freemius.com
  * Author:            ReCorp
  * Author URI:        https://www.upwork.com/fl/rayhan1
@@ -42,6 +42,7 @@ function activate_export_wp_page_to_static_html_pro() {
 	Export_Wp_Page_To_Static_Html_Activator::activate();
 }
 
+
 register_activation_hook( __FILE__, 'activate_export_wp_page_to_static_html_pro' );
 
 if (!function_exists('run_export_wp_page_to_static_html')){
@@ -51,7 +52,7 @@ if (!function_exists('run_export_wp_page_to_static_html')){
      * Start at version 1.0.0 and use SemVer - https://semver.org
      * Rename this for your plugin and update it as you release new versions.
      */
-    define( 'EXPORT_WP_PAGE_TO_STATIC_HTML_VERSION', '2.5.2' );
+    define( 'EXPORT_WP_PAGE_TO_STATIC_HTML_VERSION', '2.5.4' );
     define( 'EWPPTSH_PLUGIN_DIR_URL', plugin_dir_url(__FILE__) );
     define( 'EWPPTSH_PLUGIN_DIR_PATH', plugin_dir_path(__FILE__) );
 

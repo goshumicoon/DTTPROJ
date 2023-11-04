@@ -19,6 +19,11 @@ class extract_audios
      */
     public function get_audios($url="")
     {
+        // Check if the cancel command is found for the admin and exit if true
+        if ($this->admin->is_cancel_command_found()) {
+            exit;
+        }
+
         $src = $this->admin->site_data;
         $audioLinks = $src->find('audio');
         $audioHrefLinks = $src->find('a');
@@ -33,6 +38,11 @@ class extract_audios
             }
 
             foreach ($audioLinks as $link) {
+
+                if($this->admin->is_cancel_command_found()){
+                    exit;
+                }
+
                 if (isset($link->src) && !empty($link->src)) {
                     $src_link = $link->src;
                     $src_link = html_entity_decode($src_link, ENT_QUOTES);
@@ -66,6 +76,12 @@ class extract_audios
 
         if (!empty($audioHrefLinks)){
             foreach ($audioHrefLinks as $link) {
+
+                // Check if the cancel command is found for the admin and exit if true
+                if ($this->admin->is_cancel_command_found()) {
+                    exit;
+                }
+
                 if (isset($link->href) && !empty($link->href)) {
                     $src_link = $link->href;
                     $src_link = html_entity_decode($src_link, ENT_QUOTES);

@@ -95,6 +95,7 @@ $(document).on("click", ".export_internal_page_to_html", function(e){
             'receive_email': receive_email,
             'email_lists': email_lists,
             'alt_export': alt_export,
+            'time': Date.now()
         };
 
 
@@ -104,14 +105,18 @@ $(document).on("click", ".export_internal_page_to_html", function(e){
             type: 'post',
             //async: false,
             dataType: 'json',
+            cache: false,
 
             beforeSend: function(){
 
             },
             success: function(r){
                 if(r.success == 'true'){
-                    $('.flat-button.pause').show();
-                    get_export_log_percentage(1000);
+
+                    setTimeout(function(){
+                        $('.flat-button.pause').show();
+                        get_export_log_percentage(1000);
+                    }, 2000);
 
                 } else {
                     console.log('Something went wrong, please try again!');

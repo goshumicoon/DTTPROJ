@@ -77,6 +77,9 @@ Or you can contact us on our site [https://myrecorp.com](https://myrecorp.com)
 
 == Changelog ==
 
+= 2.5.3 - 7 July 2023 =
+* Updated freemius SDK.
+
 = 2.5.2 - 28 May 2023 =
 * Added sslverify: false. It will help to export all http sites.
 

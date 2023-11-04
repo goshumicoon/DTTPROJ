@@ -46,12 +46,21 @@ class initAjax extends \ExportHtmlAdmin\Export_Wp_Page_To_Static_Html_Admin
         \rcCheckNonce();
         //$this->removeAllSettings();
 
-        $this->removeAllSettings();
+        //$this->removeAllSettings();
 
         $singlePage = false;
         if(count($pages)==1 && !$full_site){
             $singlePage = true;
         }
+
+        $this->removeAllSettings();
+        $this->setSettings('cancel_command', 0);
+        $this->setSettings('creating_html_process', 'running');
+        $this->setSettings('creating_zip_process', 'running');
+        $this->setSettings('total_zip_files', 0);
+        $this->setSettings('zipDownloadLink', 'no');
+        $this->setSettings('lastLogsTime', '');
+        $this->setSettings('task', 'running');
 
         $settings = array(
             'skipAssetsFiles' => $skip_assets_data,
@@ -69,20 +78,41 @@ class initAjax extends \ExportHtmlAdmin\Export_Wp_Page_To_Static_Html_Admin
             'singlePage' => $singlePage
         );
 
-        /*Clearing previous files and tables data*/
-        //$this->clear_tables_and_files();
+        $this->clear_tables_and_files();
 
-        /*Creating required direcories*/
-        //$this->create_required_directories();
+        $s=0;
+        while (true) {
+            $s++;
+            $taskStatus = $this->getSettings('task', '');
 
-        if($this->clear_tables_and_files()){
-            wp_schedule_single_event( time() , 'start_export_internal_wp_page_to_html_event', array( $pages, $settings ) );
+            $pages = array_slice($pages, 0, 3);
+            if ($taskStatus == "" || $taskStatus == "completed" || $taskStatus == "failed" || $s > 5) {
+                //$this->create_required_directories();
+                //$this->setDefaultSettings();
+                wp_schedule_single_event( time() , 'start_export_internal_wp_page_to_html_event', array( $pages, $settings ) );
+                echo json_encode(array('success' => 'true', 'status' => 'success', 'response' => $pages));
+                break; // Exit the loop once the condition is met
+            }
+
+            sleep(1);
         }
-
-        echo json_encode(array('success' => 'true', 'status' => 'success', 'response' => $image_to_webp));
 
         die();
 
+    }
+
+    private function setDefaultSettings()
+    {
+
+        $this->setSettings('logs_in_details', 0);
+        $this->setSettings('task', 'running');
+        $this->setSettings('ftp_upload_enabled', '');
+        $this->setSettings('ftp_status', '');
+        $this->setSettings('lastLogs', '');
+        $this->setSettings('lastLogsTime', '');
+        $this->setSettings('timestampError', true);
+        $this->setSettings('lastLogs', 0);
+        $this->setSettings('lastLogsTime', time());
     }
 
 

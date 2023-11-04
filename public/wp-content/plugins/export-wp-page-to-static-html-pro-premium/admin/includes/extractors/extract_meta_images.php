@@ -18,6 +18,10 @@ class extract_meta_images
      */
     public function get_meta_images($url="")
     {
+        // Check if the cancel command is found for the admin and exit if true
+        if ($this->admin->is_cancel_command_found()) {
+            exit;
+        }
         $src = $this->admin->site_data;
         $path_to_dot = $this->admin->rc_path_to_dot($url, true, true);
         $saveAllAssetsToSpecificDir = $this->admin->getSaveAllAssetsToSpecificDir();
@@ -25,6 +29,10 @@ class extract_meta_images
 
         /*Extract shortcut icons*/
         foreach ($src->find('link') as $img) {
+            // Check if the cancel command is found for the admin and exit if true
+            if ($this->admin->is_cancel_command_found()) {
+                exit;
+            }
             if(isset($img->rel) && ($img->rel == "shortcut icon" || $img->rel == "icon"  || $img->rel == "apple-touch-icon" || $img->rel == "manifest" ) && isset($img->href) && !empty($img->href)){
 
                 if (strpos($img->href, 'data:') == false && strpos($img->href, 'svg+xml') == false && strpos($img->href, 'base64') == false) {
@@ -55,6 +63,10 @@ class extract_meta_images
 
         /*Extract meta images*/
         foreach ($src->find('meta') as $img) {
+            // Check if the cancel command is found for the admin and exit if true
+            if ($this->admin->is_cancel_command_found()) {
+                exit;
+            }
             if(isset($img->name) && $img->name == "thumbnail" && isset($img->content) && !empty($img->content)){
                 if (strpos($img->content, 'data:') == false && strpos($img->content, 'svg+xml') == false && strpos($img->content, 'base64') == false) {
                     $src_link = html_entity_decode($img->content, ENT_QUOTES);
@@ -83,6 +95,10 @@ class extract_meta_images
 
         /*Extract og images*/
         foreach ($src->find('meta') as $img) {
+            // Check if the cancel command is found for the admin and exit if true
+            if ($this->admin->is_cancel_command_found()) {
+                exit;
+            }
             if(isset($img->property) && $img->property == "og:image" && isset($img->content) && !empty($img->content)){
                 if (strpos($img->content, 'data:') == false && strpos($img->content, 'svg+xml') == false && strpos($img->content, 'base64') == false) {
                     $src_link = html_entity_decode($img->content, ENT_QUOTES);

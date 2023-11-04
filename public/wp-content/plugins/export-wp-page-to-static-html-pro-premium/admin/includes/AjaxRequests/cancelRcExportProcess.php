@@ -29,7 +29,7 @@ class initAjax extends \ExportHtmlAdmin\Export_Wp_Page_To_Static_Html_Admin
         //update_option('html_export_cancel', 'yes');
         //$stop_event = wp_schedule_single_event( time() , 'start_export_internal_wp_page_to_html_event', array( array(), array(), array(), array() ) );
         //$this->update_export_log('', 'cancel_export_process');
-        $this->setSettings('cancel_command', true);
+        $this->setSettings('cancel_command', 1);
         $this->setSettings('task', 'failed');
 
 

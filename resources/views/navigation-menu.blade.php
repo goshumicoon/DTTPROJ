@@ -93,7 +93,7 @@ img.wp-smiley,img.emoji{display:inline !important;border:none !important;box-sha
 
 </style>
 
-<header class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-inline ast-hide-custom-menu-mobile ast-builder-menu-toggle-icon ast-mobile-header-inline" id="masthead" itemtype="https://schema.org/WPHeader" itemscope="itemscope" itemid="#masthead">
+<header id="site-header" class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-inline ast-hide-custom-menu-mobile ast-builder-menu-toggle-icon ast-mobile-header-inline"  itemtype="https://schema.org/WPHeader" itemscope="itemscope" itemid="#masthead">
     <div id="ast-desktop-header" data-toggle-type="dropdown">
       <div class="ast-main-header-wrap main-header-bar-wrap">
         <div class="ast-primary-header-bar ast-primary-header main-header-bar site-header-focus-item" data-section="section-primary-header-builder">

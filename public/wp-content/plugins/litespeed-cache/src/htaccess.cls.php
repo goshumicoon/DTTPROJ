@@ -558,14 +558,14 @@ class Htaccess extends Root
 			if (defined('COOKIEHASH')) {
 				$vary_cookies[] = ',wp-postpass_' . COOKIEHASH;
 			}
-			$vary_cookies = apply_filters('litespeed_vary_cookies', $vary_cookies); // todo: test if response vary header can work in latest OLS, drop the above two lines
 		}
+		$vary_cookies = apply_filters('litespeed_vary_cookies', $vary_cookies); // todo: test if response vary header can work in latest OLS, drop the above two lines
 		// frontend and backend
 		if ($vary_cookies) {
 			$env = 'Cache-Vary:' . implode(',', $vary_cookies);
-			if (LITESPEED_SERVER_TYPE === 'LITESPEED_SERVER_OLS') {
-				$env = '"' . $env . '"';
-			}
+			// if (LITESPEED_SERVER_TYPE === 'LITESPEED_SERVER_OLS') {
+			// }
+			$env = '"' . $env . '"';
 			$new_rules[] = $new_rules_backend[] = self::MARKER_LOGIN_COOKIE . self::MARKER_START;
 			$new_rules[] = $new_rules_backend[] = 'RewriteRule .? - [E=' . $env . ']';
 			$new_rules[] = $new_rules_backend[] = self::MARKER_LOGIN_COOKIE . self::MARKER_END;
@@ -593,7 +593,7 @@ class Htaccess extends Root
 
 		// webp support
 		$id = Base::O_IMG_OPTM_WEBP;
-		if (!empty($cfg[$id]) || !empty($cfg[Base::O_GUEST])) {
+		if (!empty($cfg[$id]) || (!empty($cfg[Base::O_GUEST]) && !empty($cfg[Base::O_GUEST_OPTM]))) {
 			$new_rules[] = self::MARKER_WEBP . self::MARKER_START;
 			$new_rules[] = 'RewriteCond %{HTTP_ACCEPT} "image/webp"';
 			$new_rules[] = 'RewriteRule .* - [E=Cache-Control:vary=%{ENV:LSCACHE_VARY_VALUE}+webp]';

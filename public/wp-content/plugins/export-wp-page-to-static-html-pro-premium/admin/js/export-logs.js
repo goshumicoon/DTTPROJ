@@ -11,6 +11,7 @@
         'action': 'export_log_percentage',
         'rc_nonce': rcewpp.nonce,
         'id': log_id,
+        'time': Date.now()
       };
 
       $.ajax({
@@ -18,6 +19,7 @@
         data: datas,
         type: 'post',
         dataType: 'json',
+        cache: false,
 
         beforeSend: function(){
 
@@ -40,6 +42,7 @@
   $(document).on("click", ".see_logs_in_details", function(e){
     e.preventDefault();
     $('.logs').show();
+    $('.logs_list').prepend('<div class="log main_log loading"><span class="danger log_type">Loading...</span></div>');
 
       var datas = {
         'action': 'see_logs_in_details',
@@ -129,6 +132,14 @@
     } else if (r.creating_html_process == 'failed') {
       rc_export_pages_failed();
       $('.htmlExportLogs .error').show();
+    } else if (r.export_status == 'completed') {
+      if (!$('.toastr-success').length){
+        $.toastr.success('Successfully exported!', {position: 'top-center'});
+      }
+
+      rc_export_pages_completed();
+      //setTimeout(function(){
+      StopInterval('intrvar');
     }
     return Promise.resolve("Success");
   }
@@ -214,7 +225,7 @@
         .then(m => {
           generateFtpFileUploadLogs(r, total_file_uploaded, total_zip_files);
         }).then(m =>{
-          if( (r.export_status == "completed" && !r.logs_in_details) || (r.export_status == "completed" && totalLogs <= parseInt(log_id)) ){
+        if( (r.export_status == "completed") || (r.export_status == "completed" && totalLogs <= parseInt(log_id)) ){
             rc_export_pages_completed();
             //setTimeout(function(){
             StopInterval('intrvar');
@@ -328,6 +339,9 @@
     $('.spinner_x').addClass('hide_spin');
     $('.cancel_rc_html_export_process').hide();
     $('.export_external_page_to_html.btn--radius-2, .export_internal_page_to_html.btn--radius-2').removeAttr('disabled');
+    if (!$('.toastr-success').length){
+      $.toastr.success('Successfully exported!', {position: 'top-center'});
+    }
   }
   function rcExportPagesToHtmlLogsCompleted() {
     $('.htmlExportLogs .progress').addClass('completed');
@@ -340,13 +354,16 @@
   }
   /*If export process failed this function will trigger*/
   function rc_export_pages_failed(text="") {
-    console.log(text);
     $('.progress').addClass('failed');
     $('.export_internal_page_to_html .spinner_x, .export_external_page_to_html .spinner_x').addClass('hide_spin');
     $('.cancel_rc_html_export_process').hide();
     StopInterval('intrvar');
     $('.tab-pane.active .btn--radius-2').removeAttr('disabled');
     $('.view_exported_file').attr('href', '').addClass('hide');
+
+    if (text!==true){
+      $('.error-notice').show()
+    }
     return Promise.resolve("Success");
   }
 
@@ -375,4 +392,5 @@
     $('.logs').hide();
     $('.logs_list').html('');
     $('.view_exported_file').attr('href', '').addClass('hide');
+    $('.error-notice').hide()
   }

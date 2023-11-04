@@ -18,6 +18,10 @@ class inline_css
      */
     public function get_inline_css($url="")
     {
+        // Check if the cancel command is found for the admin and exit if true
+        if ($this->admin->is_cancel_command_found()) {
+            exit;
+        }
         $host = $this->admin->get_host($url);
         $pathname_fonts = $this->admin->getFontsPath();
         $pathname_css = $this->admin->getCssPath();
@@ -33,12 +37,20 @@ class inline_css
         $stylesSrc = $src->find('style');
         if(!empty($stylesSrc)){
             foreach ($stylesSrc as $style) {
+                // Check if the cancel command is found for the admin and exit if true
+                if ($this->admin->is_cancel_command_found()) {
+                    exit;
+                }
                 $data = $style->innertext;
 
                 preg_match_all("/(?<=url\().*?(?=\))/", $data, $images_links);
 
                 foreach ($images_links as $key => $images) {
                     foreach ($images as $key => $image) {
+                        // Check if the cancel command is found for the admin and exit if true
+                        if ($this->admin->is_cancel_command_found()) {
+                            exit;
+                        }
                         $img_path_src = "";
                         //$path_to_dot = $this->admin->rc_path_to_dot($url, true, true);
                         if (strpos($image, 'data:') == false && strpos($image, 'svg+xml') == false && strpos($image, 'svg') == false && strpos($image, 'base64') == false) {
@@ -128,6 +140,10 @@ class inline_css
         $stylesDivs = $src->find('div[style]');
         if(!empty($stylesDivs)){
             foreach ($stylesDivs as $div) {
+                // Check if the cancel command is found for the admin and exit if true
+                if ($this->admin->is_cancel_command_found()) {
+                    exit;
+                }
 
                 if(isset($div->style)){
                     $data = $div->style;
@@ -135,7 +151,15 @@ class inline_css
                     preg_match_all("/(?<=url\().*?(?=\))/", $data, $images_links);
 
                     foreach ($images_links as $key => $images) {
+                        // Check if the cancel command is found for the admin and exit if true
+                        if ($this->admin->is_cancel_command_found()) {
+                            exit;
+                        }
                         foreach ($images as $key => $image) {
+                            // Check if the cancel command is found for the admin and exit if true
+                            if ($this->admin->is_cancel_command_found()) {
+                                exit;
+                            }
                             //$path_to_dot = $this->admin->rc_path_to_dot($url, true, true);
                             if (strpos($image, 'data:') == false && strpos($image, 'svg+xml') == false && strpos($image, 'svg') == false && strpos($image, 'base64') == false) {
                                 //$this->admin->update_urls_log($image);
